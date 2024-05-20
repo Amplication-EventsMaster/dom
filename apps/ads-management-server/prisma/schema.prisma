@@ -1,0 +1,70 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Category {
+  adGroups  AdGroup[]
+  createdAt DateTime  @default(now())
+  id        String    @id @default(cuid())
+  name      String?
+  updatedAt DateTime  @updatedAt
+}
+
+model Ad {
+  adGroup     AdGroup? @relation(fields: [adGroupId], references: [id])
+  adGroupId   String?
+  createdAt   DateTime @default(now())
+  description String?
+  id          String   @id @default(cuid())
+  name        String?
+  updatedAt   DateTime @updatedAt
+}
+
+model AdGroup {
+  ads        Ad[]
+  campaign   Campaign? @relation(fields: [campaignId], references: [id])
+  campaignId String?
+  category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId String?
+  channel    Channel?  @relation(fields: [channelId], references: [id])
+  channelId  String?
+  createdAt  DateTime  @default(now())
+  id         String    @id @default(cuid())
+  name       String?
+  platform   Platform? @relation(fields: [platformId], references: [id])
+  platformId String?
+  updatedAt  DateTime  @updatedAt
+}
+
+model Campaign {
+  adGroups    AdGroup[]
+  comment     String?
+  createdAt   DateTime  @default(now())
+  description String?
+  endDate     DateTime?
+  id          String    @id @default(cuid())
+  name        String?
+  startDate   DateTime?
+  updatedAt   DateTime  @updatedAt
+}
+
+model Platform {
+  adGroups  AdGroup[]
+  createdAt DateTime  @default(now())
+  id        String    @id @default(cuid())
+  name      String?
+  updatedAt DateTime  @updatedAt
+}
+
+model Channel {
+  adGroups  AdGroup[]
+  createdAt DateTime  @default(now())
+  id        String    @id @default(cuid())
+  name      String?
+  updatedAt DateTime  @updatedAt
+}
